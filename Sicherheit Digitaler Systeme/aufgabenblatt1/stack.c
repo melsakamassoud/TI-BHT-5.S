@@ -3,7 +3,6 @@
 
 #define PLEN sizeof(long *)
 #pragma GCC diagnostic ignored "-Warray-bounds"
-
 int foo(long a, long b) {
 	long x = 3;
 	long y = 4;
