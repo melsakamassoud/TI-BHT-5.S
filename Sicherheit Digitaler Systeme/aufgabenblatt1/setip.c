@@ -34,7 +34,19 @@ void allow_syscall(scmp_filter_ctx ctx, int syscall) {
 }
 
 void set_allow_list(scmp_filter_ctx ctx) {
+	allow_syscall(ctx, SCMP_SYS(write));
+	allow_syscall(ctx, SCMP_SYS(read));
+	allow_syscall(ctx, SCMP_SYS(close));
+	allow_syscall(ctx, SCMP_SYS(prctl));
+	allow_syscall(ctx, SCMP_SYS(seccomp));
+	allow_syscall(ctx, SCMP_SYS(setgid));
+	allow_syscall(ctx, SCMP_SYS(setuid));
+
 	allow_syscall(ctx, SCMP_SYS(ioctl));
+	allow_syscall(ctx, SCMP_SYS(socket));
+	
+	allow_syscall(ctx, SCMP_SYS(exit));
+	allow_syscall(ctx, SCMP_SYS(exit_group));
 }
 
 static void setup_syscall(bool kill) {
@@ -58,7 +70,7 @@ static void setup_syscall(bool kill) {
 	seccomp_release(ctx);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc,const char* argv[]) {
 	if(argc != 3) {
 		puts("Usage: setip <interface> <address>");
 		exit(EXIT_FAILURE);	
@@ -115,7 +127,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	const char delim[2] = ".";
-	char *ip_tokenized = strtok(argv[2], delim);
+	char *ip_address = (char*)malloc(strlen(argv[2])*sizeof(char));
+	strcpy(ip_address, argv[2]);
+	char *ip_tokenized = strtok(ip_address, delim);
 	int ip_digits = 4;  
 	while (ip_tokenized != NULL) {
 		ip_digits--;	
@@ -134,13 +148,16 @@ int main(int argc, char* argv[]) {
 		ip_tokenized = strtok(NULL, delim);
 	}
 
-	setup_syscall(true);
 	set_ip(argv[2], argv[1]); 
-	setup_syscall(false);
+	// minimal priveleges starts here
 	setgid(65534);
 	setuid(65534);
-
+	// system call filtering starts here
+	setup_syscall(true);
 	closedir(dir);
 	free(ip_interfaces);
+	setup_syscall(false);
+
+
 	exit(EXIT_SUCCESS);
 }	
