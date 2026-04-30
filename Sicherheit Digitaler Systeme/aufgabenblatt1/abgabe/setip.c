@@ -13,7 +13,6 @@
 #include <ctype.h>
 #include <seccomp.h>
 #include <stdbool.h>
-#include <limits.h>
 
 
 void set_ip(const char *ip, const char *dev) {
@@ -35,17 +34,18 @@ void allow_syscall(scmp_filter_ctx ctx, int syscall) {
 }
 
 void set_allow_list(scmp_filter_ctx ctx) {
-	(void)ctx;
-//	allow_syscall(ctx, SCMP_SYS(read));
-//	allow_syscall(ctx, SCMP_SYS(write));
+	allow_syscall(ctx, SCMP_SYS(write));
+	allow_syscall(ctx, SCMP_SYS(read));
 	allow_syscall(ctx, SCMP_SYS(close));
-//	allow_syscall(ctx, SCMP_SYS(prctl));
-//	allow_syscall(ctx, SCMP_SYS(seccomp));
-//	allow_syscall(ctx, SCMP_SYS(setgid));
-//	allow_syscall(ctx, SCMP_SYS(setuid));
-//	allow_syscall(ctx, SCMP_SYS(ioctl));
-//	allow_syscall(ctx, SCMP_SYS(socket));
-//	allow_syscall(ctx, SCMP_SYS(exit));
+	allow_syscall(ctx, SCMP_SYS(prctl));
+	allow_syscall(ctx, SCMP_SYS(seccomp));
+	allow_syscall(ctx, SCMP_SYS(setgid));
+	allow_syscall(ctx, SCMP_SYS(setuid));
+
+	allow_syscall(ctx, SCMP_SYS(ioctl));
+	allow_syscall(ctx, SCMP_SYS(socket));
+	
+	allow_syscall(ctx, SCMP_SYS(exit));
 	allow_syscall(ctx, SCMP_SYS(exit_group));
 }
 
@@ -129,41 +129,35 @@ int main(int argc,const char* argv[]) {
 	const char delim[2] = ".";
 	char *ip_address = (char*)malloc(strlen(argv[2])*sizeof(char));
 	strcpy(ip_address, argv[2]);
-	char *ip_token = strtok(ip_address, delim);
-
-	char *endptr;
-	int ip_digits = 4; 
-	long digit;
-	while (ip_token != NULL) {
-		printf("ip_token part %d: %s\n", ip_digits, ip_token);	
-		digit = strtol(ip_token, &endptr, 10);
-		if (errno == ERANGE || endptr == ip_token || *endptr != '\0') {
-			perror("strtol()");
-			exit(EXIT_FAILURE);
-		}
-		printf("ip_digit as number: %ld\n", digit);	
-		if (digit > 255 || digit < 0) {
+	char *ip_tokenized = strtok(ip_address, delim);
+	int ip_digits = 4;  
+	while (ip_tokenized != NULL) {
+		ip_digits--;	
+		if(ip_digits < 0) {
 			printf("Invalid IPv4-format\n");
 			exit(EXIT_FAILURE);
 		}
-		ip_digits--;	
-		ip_token = strtok(NULL, delim);
+		// printf("ip_tokenized part %d: %s\n", ip_digits, ip_tokenized);	
+		for(int i = 0; ip_tokenized[i] != '\0'; i++) {
+			// printf("is a digit?: %c\n", ip_tokenized[i]);
+			if (!isdigit((unsigned char)ip_tokenized[i])) {
+				printf("Invalid IPv4-format\n");
+				exit(EXIT_FAILURE);
+			}
+		}
+		ip_tokenized = strtok(NULL, delim);
 	}
-	
-	if(ip_digits < 0) {
-		printf("Invalid IPv4-format\n");
-		exit(EXIT_FAILURE);
-	}
-
 
 	set_ip(argv[2], argv[1]); 
+	// minimal priveleges starts here
 	setgid(65534);
 	setuid(65534);
-
+	// system call filtering starts here
 	setup_syscall(true);
-
 	closedir(dir);
 	free(ip_interfaces);
+	setup_syscall(false);
+
 
 	exit(EXIT_SUCCESS);
 }	
