@@ -6,5 +6,8 @@
 *.hex
 *.map
 *.o
+*.d
+*.su
+*.cyclo
 .settings/
 .metadata/
