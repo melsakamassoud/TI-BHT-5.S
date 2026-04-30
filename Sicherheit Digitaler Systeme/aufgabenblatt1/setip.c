@@ -21,202 +21,229 @@
 #define PIPE_END_WRITE 1
 
 struct payload {
-        char ifname[IFNAMSIZ];
-        char ip[INET_ADDRSTRLEN];
+	char ifname[IFNAMSIZ];
+	char ip[INET_ADDRSTRLEN];
 };
 
 void set_ip(const char *ip, const char *dev) {
-        struct ifreq ifr;
-        int fd = socket(AF_INET, SOCK_DGRAM, 0);
-        if (fd < 0) error(errno, errno, "socket");
-        strncpy(ifr.ifr_name, dev, IFNAMSIZ - 1);
-        ifr.ifr_name[IFNAMSIZ - 1] = '\0';
+	struct ifreq ifr;
+	int fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (fd < 0) error(errno, errno, "socket");
+	strncpy(ifr.ifr_name, dev, IFNAMSIZ - 1);
+	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
 
-        struct sockaddr_in* addr = (struct sockaddr_in *) &ifr.ifr_addr;
-        addr->sin_family = AF_INET;
-        if (inet_pton(AF_INET, ip, &addr->sin_addr) != 1) error(0, errno, "inet_pton");
-        if (ioctl(fd, SIOCSIFADDR, &ifr) == -1) error(0, errno, "SIOCSIFADDR");
+	struct sockaddr_in* addr = (struct sockaddr_in *) &ifr.ifr_addr;
+	addr->sin_family = AF_INET;
+	if (inet_pton(AF_INET, ip, &addr->sin_addr) != 1) error(0, errno, "inet_pton");
+	if (ioctl(fd, SIOCSIFADDR, &ifr) == -1) error(0, errno, "SIOCSIFADDR");
 
-        close(fd);
+	close(fd);
 }
 
 void allow_syscall(scmp_filter_ctx ctx, int syscall) {
-        seccomp_rule_add(ctx, SCMP_ACT_ALLOW, syscall, 0);
+	seccomp_rule_add(ctx, SCMP_ACT_ALLOW, syscall, 0);
 }
 
 void set_allow_list(scmp_filter_ctx ctx) {
-        (void)ctx;
-        allow_syscall(ctx, SCMP_SYS(close));
-        allow_syscall(ctx, SCMP_SYS(exit_group));
+	(void)ctx;
+	allow_syscall(ctx, SCMP_SYS(close));
+	allow_syscall(ctx, SCMP_SYS(exit_group));
+	allow_syscall(ctx, SCMP_SYS(write));
+	allow_syscall(ctx, SCMP_SYS(openat));
+	allow_syscall(ctx, SCMP_SYS(fstat));
+	allow_syscall(ctx, SCMP_SYS(getdents64));
 }
 
-static void setup_syscall(bool kill) {
-        scmp_filter_ctx ctx;
-        if (kill) {
-                ctx = seccomp_init(SCMP_ACT_KILL);
-                if (ctx) set_allow_list(ctx);
-                else perror("seccomp_init()");
-        } else {
-                ctx = seccomp_init(SCMP_ACT_ALLOW);
-                if (ctx) seccomp_rule_add(ctx, SCMP_ACT_KILL_PROCESS, SCMP_SYS(write), 0);
-                else perror("seccomp_init()");
-        }
-        seccomp_load(ctx);
-        seccomp_release(ctx);
+static void setup_syscall(void) {
+	scmp_filter_ctx ctx;
+	ctx = seccomp_init(SCMP_ACT_KILL);
+	if (ctx) set_allow_list(ctx);
+	else perror("seccomp_init()");
+	if (seccomp_load(ctx) < 0) {
+		perror("seccomp_load()");
+		seccomp_release(ctx);
+		exit(EXIT_FAILURE);
+	}
+	seccomp_release(ctx);
 }
 
 void free_resources(char **ifs,
-                int ifs_count,
-                DIR *dir,
-                char *ip_address
-                ) {
-        if (ifs) {
-                for (int i = 0; i < ifs_count; i++) free(ifs[i]);
-                free(ifs);
-        }
-        if (dir) closedir(dir);
-        if (ip_address) free(ip_address);
+		int ifs_count,
+		DIR *dir,
+		char *ip_address
+		) {
+	if (ifs) {
+		for (int i = 0; i < ifs_count; i++) free(ifs[i]);
+		free(ifs);
+	}
+	if (dir) closedir(dir);
+	if (ip_address) free(ip_address);
 }
 
-int main(int argc,const char* argv[]) {
+int main(int argc, const char* argv[]) {
 
-        int fdp[2];
-        if (pipe(fdp) == -1) error(errno, errno, "pipe");
-        pid_t pid = fork();
-        if (pid == -1) error(errno, errno, "fork");
+	int fdp[2];
+	if (pipe(fdp) == -1) error(errno, errno, "pipe");
+	pid_t pid = fork();
+	if (pid == -1) error(errno, errno, "fork");
 
-        if (pid != CHILD) {
-                int status;
-                struct payload data;
+	if (pid != CHILD) {
+		int status;
+		struct payload data;
 
-                close(fdp[PIPE_END_WRITE]);
+		close(fdp[PIPE_END_WRITE]);
 
-                ssize_t r = read(fdp[PIPE_END_READ], &data, sizeof(data));
-                if (r != sizeof(data)) {
-                        close(fdp[PIPE_END_READ]);
-                        waitpid(pid, &status, 0);
-                        exit(EXIT_FAILURE);
-                }
+		ssize_t r = read(fdp[PIPE_END_READ], &data, sizeof(data));
+		if (r != sizeof(data)) {
+			close(fdp[PIPE_END_READ]);
+			waitpid(pid, &status, 0);
+			exit(EXIT_FAILURE);
+		}
 
-                close(fdp[PIPE_END_READ]);
+		close(fdp[PIPE_END_READ]);
 
-                waitpid(pid, &status, 0);
+		waitpid(pid, &status, 0);
 
-                if (WIFEXITED(status)) {
-                        int code = WEXITSTATUS(status);
-                        if (code != 0) exit(EXIT_FAILURE);
-                } else if (WIFSIGNALED(status)) {
-                        exit(EXIT_FAILURE);
-                }
+		if (WIFEXITED(status)) {
+			int code = WEXITSTATUS(status);
+			printf("Child exited with code %d\n", code);
+			if (code != 0) exit(EXIT_FAILURE);
+		} else if (WIFSIGNALED(status)) {
+			int sig = WTERMSIG(status);
+			printf("Child killed by signal %d\n", sig);
+			exit(EXIT_FAILURE);
+		}
 
-                set_ip(data.ip, data.ifname);
-                exit(EXIT_SUCCESS);
-        } else {
-                setgid(65534);
-                setuid(65534);
+		set_ip(data.ip, data.ifname);
+		exit(EXIT_SUCCESS);
+	} else {
+		setgid(65534);
+		setuid(65534);
 
-                close(fdp[PIPE_END_READ]);
-                setup_syscall(true);
+		close(fdp[PIPE_END_READ]);
+		setup_syscall();
 
-                if(argc != 3) {
-                        close(fdp[PIPE_END_WRITE]);
-                        exit(EXIT_FAILURE);
-                }
+		if(argc != 3) {
+			puts("Usage: setip <interface> <address>");
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                char **ip_interfaces = NULL;
-                int ip_interface_count = 0;
-                struct dirent *entry;
-                DIR *dir = opendir("/sys/class/net/");
-                char *ip_address = NULL;
+		if (strlen(argv[1]) >= IFNAMSIZ) {
+			printf("Interface name too long\n");
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                if (!dir) {
-                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                        close(fdp[PIPE_END_WRITE]);
-                        exit(EXIT_FAILURE);
-                }
+		if (strlen(argv[2]) >= INET_ADDRSTRLEN) {
+			printf("IP address too long\n");
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                while ((entry = readdir(dir)) != NULL) {
-                        if(strcmp(entry->d_name,".") != 0 && strcmp(entry->d_name,"..") != 0) {
-                                char **tmp = realloc(ip_interfaces, (ip_interface_count+1)*sizeof(char*));
-                                if (!tmp) {
-                                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                                        close(fdp[PIPE_END_WRITE]);
-                                        exit(EXIT_FAILURE);
-                                }
-                                ip_interfaces = tmp;
+		char **ip_interfaces = NULL;
+		int ip_interface_count = 0;
+		struct dirent *entry;
+		DIR *dir = opendir("/sys/class/net/");
+		char *ip_address = NULL;
 
-                                ip_interfaces[ip_interface_count] = malloc(strlen(entry->d_name)+1);
-                                if (!ip_interfaces[ip_interface_count]) {
-                                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                                        close(fdp[PIPE_END_WRITE]);
-                                        exit(EXIT_FAILURE);
-                                }
-                                strcpy(ip_interfaces[ip_interface_count], entry->d_name);
-                                ip_interface_count++;
-                        }
-                }
+		if (!dir) {
+			perror("Couldn't open directory");
+			free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                int ifce_exist = 0;
-                for(int i = 0; i < ip_interface_count; i++) {
-                        if (strcmp(argv[1], ip_interfaces[i]) == 0) {
-                                ifce_exist = 1;
-                                break;
-                        }
-                }
+		while ((entry = readdir(dir)) != NULL) {
+			if(strcmp(entry->d_name,".") != 0 && strcmp(entry->d_name,"..") != 0) {
+				char **tmp = realloc(ip_interfaces, (ip_interface_count+1)*sizeof(char*));
+				if (!tmp) {
+					perror("realloc()");
+					free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+					close(fdp[PIPE_END_WRITE]);
+					exit(EXIT_FAILURE);
+				}
+				ip_interfaces = tmp;
 
-                if(!ifce_exist) {
-                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                        close(fdp[PIPE_END_WRITE]);
-                        exit(EXIT_FAILURE);
-                }
+				ip_interfaces[ip_interface_count] = malloc(strlen(entry->d_name)+1);
+				if (!ip_interfaces[ip_interface_count]) {
+					perror("malloc()");
+					free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+					close(fdp[PIPE_END_WRITE]);
+					exit(EXIT_FAILURE);
+				}
+				strcpy(ip_interfaces[ip_interface_count], entry->d_name);
+				ip_interface_count++;
+			}
+		}
 
-                ip_address = malloc(strlen(argv[2]) + 1);
-                if (!ip_address) {
-                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                        close(fdp[PIPE_END_WRITE]);
-                        exit(EXIT_FAILURE);
-                }
+		int ifce_exist = 0;
+		for(int i = 0; i < ip_interface_count; i++) {
+			if (strcmp(argv[1], ip_interfaces[i]) == 0) {
+				ifce_exist = 1;
+				break;
+			}
+		}
 
-                strcpy(ip_address, argv[2]);
-                char *ip_token = strtok(ip_address, ".");
+		if(!ifce_exist) {
+			printf("Interface %s doesn't exist\n", argv[1]);
+			free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                char *endptr;
-                int ip_digits = 4;
-                long digit;
+		ip_address = malloc(strlen(argv[2]) + 1);
+		if (!ip_address) {
+			perror("malloc()");
+			free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                while (ip_token != NULL) {
-                        errno = 0;
-                        digit = strtol(ip_token, &endptr, 10);
-                        if (errno == ERANGE || endptr == ip_token || *endptr != '\0' || digit < 0 || digit > 255) {
-                                free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                                close(fdp[PIPE_END_WRITE]);
-                                exit(EXIT_FAILURE);
-                        }
-                        ip_digits--;
-                        ip_token = strtok(NULL, ".");
-                }
+		strcpy(ip_address, argv[2]);
+		char *ip_token = strtok(ip_address, ".");
 
-                if (ip_digits != 0) {
-                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                        close(fdp[PIPE_END_WRITE]);
-                        exit(EXIT_FAILURE);
-                }
+		char *endptr;
+		int ip_digits = 4;
+		long digit;
 
-                struct payload data;
-                strncpy(data.ifname, argv[1], IFNAMSIZ - 1);
-                data.ifname[IFNAMSIZ - 1] = '\0';
-                strncpy(data.ip, argv[2], INET_ADDRSTRLEN - 1);
-                data.ip[INET_ADDRSTRLEN - 1] = '\0';
+		while (ip_token != NULL) {
+			// printf("ip_token part %d: %s\n", ip_digits, ip_token);
+			errno = 0;
+			digit = strtol(ip_token, &endptr, 10);
+			if (errno == ERANGE || endptr == ip_token || *endptr != '\0' || digit < 0 || digit > 255) {
+				printf("Invalid IPv4-format\n");
+				free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+				close(fdp[PIPE_END_WRITE]);
+				exit(EXIT_FAILURE);
+			}
+			// printf("ip_digit as number: %ld\n", digit);
+			ip_digits--;
+			ip_token = strtok(NULL, ".");
+		}
 
-                ssize_t w = write(fdp[PIPE_END_WRITE], &data, sizeof(data));
-                if (w != sizeof(data)) {
-                        free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                        close(fdp[PIPE_END_WRITE]);
-                        exit(EXIT_FAILURE);
-                }
+		if (ip_digits != 0) {
+			printf("Invalid IPv4-format\n");
+			free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
 
-                free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
-                close(fdp[PIPE_END_WRITE]);
-                exit(EXIT_SUCCESS);
-        }
+		struct payload data;
+		strncpy(data.ifname, argv[1], IFNAMSIZ - 1);
+		data.ifname[IFNAMSIZ - 1] = '\0';
+		strncpy(data.ip, argv[2], INET_ADDRSTRLEN - 1);
+		data.ip[INET_ADDRSTRLEN - 1] = '\0';
+
+		ssize_t w = write(fdp[PIPE_END_WRITE], &data, sizeof(data));
+		if (w != sizeof(data)) {
+			free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+			close(fdp[PIPE_END_WRITE]);
+			exit(EXIT_FAILURE);
+		}
+
+		free_resources(ip_interfaces, ip_interface_count, dir, ip_address);
+		close(fdp[PIPE_END_WRITE]);
+		exit(EXIT_SUCCESS);
+	}
 }
