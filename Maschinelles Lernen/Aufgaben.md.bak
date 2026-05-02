@@ -1,0 +1,68 @@
+Aufgabe 1):
+1a)
+
+Befassen Sie sich mit dem Tool „AI Studio”. 
+Welche Datenformate stehen zum Im- und Export von Daten zur Verfügung?
+1b)
+
+import Datenformate: 
+![import-datenformate](import_datatypes.jpg)  
+import/export Prozessdatenformate:  
+![import/export-prozessdatenformate](import_prozess_datatypes.jpg)  
+export Bilddatenformate:  
+![export-bilddatenformate](export_image_datatypes.jpg)  
+
+
+Zu Dokumentationszwecken fügen Sie den erzeugten Datensatz im gewählten 
+Format Ihrer Abgabe im Anhang Ihrer pdf-Datei bei, d.h. nicht als getrenntes Dokument, 
+sondern auf den letzten Seiten des Laborprotokolls.
+Aufgabe 2):
+CSV
+
+Als ML-Algorithmus soll der naive Bayes-Klassifikator (für diskrete Merkmale) 
+zum Einsatz kommen, den wir in der vierten Veranstaltung kennengelernt haben bzw. 
+kennenlernen werden. Finden Sie also heraus, wie sich mittels AI Studio der naive 
+Bayes-Klassifikator (für diskrete Merkmale) hierauf anwenden lässt.
+2a)
+Datensatz importieren
+neuen Prozess erstellen
+unter operatoren naive bayes auswählen und ins design ziehen 
+und mit daten verbinden
+
+Beschreiben Sie dazu, welche Module/Komponenten von AI Studio Sie verwenden. 
+Einige Module/Komponenten benötigen zusätzliche Konfiguration (Parametrierung). 
+Falls Sie etwas an den Standardeinstellungen eines Moduls / einer Komponente ändern mussten, 
+damit das Ergebnis plausibel ist, so dokumentieren Sie bitte auch dies. Beachten Sie hierzu auch,
+dass AI Studio seit Neustem einige Parameter vor dem Nutzer versteckt, 
+sodass diese erst sichtbar geschaltet werden müssen.
+2b)
+
+Lösung
+
+Fügen Sie dem Protokoll schließlich einen lesbaren Screenshot Ihrer Lösung an.
+Aufgabe 3):
+3a)
+
+anwenden und dokumentieren
+
+Wie hoch schätzt AI Studio unter Verwendung des naiven Bayes-Klassifikators 
+die Wahrscheinlichkeit ein, dass eine große Person (large) mit nicht-kurzen Haaren 
+(no) weiblich (w) ist? Dokumentieren Sie auch hier Ihr Ergebnis mittels Screenshot.
+3b)
+
+Wie ändert sich das Ergebnis, wenn die Fragestellung lautet, 
+ob die Person der Klasse männlich (m) angehört? Dokumentieren Sie (per Screenshot) 
+und interpretieren Sie beide Ergebnisse durch einen Antwortsatz. 
+Der bloße Screenshot ist als Antwort nicht ausreichend!
+
+Tipps:
+
+    Bereiten Sie sich auf Nachfragen bzgl. des von Ihnen gewählten Vorgehens vor.
+    Sie dürfen sich im Team die Aufgaben auch aufteilen. 
+	Dennoch muss jedes Teammitglied über alle Aufgabenteile auskunftfähig sein, 
+	d.h. auf Nachfragen antworten zu können.
+
+Diese Aufgabe wird mit max. fünf (5) Punkten bewertet. Jede Abweichung von den in der 
+Aufgabenstellung geforderten Teilaufgaben resultiert in entsprechendem Punktabzug.
+
+Viel Erfolg!
