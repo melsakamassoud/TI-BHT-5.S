@@ -1,8 +1,5 @@
-
-
 LIBRARY ieee;
-USE ieee.std_logic_1164.ALL; -- TODO: nur genutzte Libraries
---USE ieee.std_logic_1164.std_logic_vector;
+USE ieee.std_logic_1164.ALL;
 
 entity comparator_gt_param is
     generic (
@@ -41,16 +38,5 @@ begin
 
         y <= temp_gt(0);
     end process;
-
-
-
-    
---    result <= 
---           gt_comp_4bit(3) OR
---           (eq_comp_4bit(3) AND gt_comp_4bit(2)) OR
---           (eq_comp_4bit(3) AND eq_comp_4bit(2) AND gt_comp_4bit(1)) OR
---           (eq_comp_4bit(3) AND eq_comp_4bit(2) AND eq_comp_4bit(1) AND gt_comp_4bit(0));
-
-            
 
 end architecture RTL;

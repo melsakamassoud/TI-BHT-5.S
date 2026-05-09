@@ -1,5 +1,6 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.ALL; 
+USE ieee.std_logic_1164.ALL; -- TODO: nur genutzte Libraries
+--USE ieee.std_logic_1164.std_logic_vector;
 
 entity comparator_eq_4bit is
     port (
@@ -24,6 +25,15 @@ begin
     
     -- E e3 UND e2 UND ...
     result <= (eq_comp_4bit(0) AND eq_comp_4bit(1) AND eq_comp_4bit(2) AND eq_comp_4bit(3));
-	 
+    
+    
+    -- oder:
+    --result <= (not (a(0) xor b(0))) AND
+    --      (not (a(1) xor b(1))) AND
+    --      (not (a(2) xor b(2))) AND
+    --      (not (a(3) xor b(3)));
+
+    -- ist das effizienter? macht das einen unterschied?
+
 end architecture RTL;
 

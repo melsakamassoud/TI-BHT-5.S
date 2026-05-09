@@ -1,5 +1,6 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_1164.ALL; -- TODO: nur genutzte Libraries
+--USE ieee.std_logic_1164.std_logic_vector;
 
 entity comparator_gt_4bit is
     port (
