@@ -1,0 +1,41 @@
+library ieee;
+use ieee.std_logic_1164.all;
+USE ieee.numeric_std.ALL;
+
+entity tb_adder_n is
+end entity tb_adder_n;
+
+architecture behav of tb_adder_n is
+
+constant n : positive := 8;
+constant max_val : positive := 2**n - 1;
+constant mode : std_logic := '1';
+
+signal x, y, sum : std_logic_vector(n-1 downto 0);
+signal m : std_logic := mode;
+
+begin
+
+	fa_n : entity work.adder_n(rtl)
+    generic map (
+        N => n
+    )
+    port map (
+     	x    => x, -- adder_n rechnet y - x bei Subtraktion
+     	y    => y,
+     	m  => m,
+	sum => sum
+    );
+    stimuli : process
+	begin
+
+	for i in 0 to max_val loop
+		x <= std_logic_vector(to_unsigned(i, n));
+		y <= std_logic_vector(to_unsigned(max_val - i, n));
+		wait for 10 ns;
+	end loop;
+
+	wait;
+   end process;
+
+end behav; 

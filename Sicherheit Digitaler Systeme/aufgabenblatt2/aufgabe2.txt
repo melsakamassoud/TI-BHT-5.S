@@ -1,0 +1,25 @@
+Aufgabe 2
+
+a) 
+Ea,b(m) = a * m + b (mod 23)
+c = a * m + b (mod 23)
+c mod 23 = Ea,b(m)
+
+Für gegebene c und m wird der Wertebereich für a und b eingschränkt.
+
+b) 
+
+Der Angreifer stellt 2 Anfragen und wählt für die Klartexte m0 = 0 und m1 = 1.
+a * 0 + b = b (mod 23)
+b mod 23 = b  
+
+a * 1 + b = a + b (mod 23)
+
+b ist aus der ersten Anrage schon bekannt
+
+Ea,b(1) - b = (a + b) - b (mod 23)
+
+E(1)-b = a
+
+Für das gefundene Schlüsselpaar (a, b) lässt sich für die Verschlüsselungsfunktion Ea,b(m),
+m eindeutig bestimmen für eine gegebene Chiffre.
