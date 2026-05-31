@@ -1,59 +1,9 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
+#include "stm32f429xx.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 
 // Die Funktion lässt n ms den Timer komplett hochzählen auf 16000 (pro ms) und stoppt diesen dann
 void delay_ms(uint16_t n) {
@@ -76,7 +26,91 @@ void delay_ms(uint16_t n) {
 	// stoppt den timer und setzt die quelle wieder zurück auf die AHB clock
 	SysTick->CTRL = 0;
 }
-/* USER CODE END 0 */
+
+volatile int fuA = 0;
+
+void fussgaengerampel () {
+	switch(fuA) {
+		case 0:
+			// rot an grün aus
+			GPIOG->ODR &= ~(1 << 10);
+			GPIOG->ODR |= (1 << 6);
+			// delay_ms(4000);
+			break;
+		case 4:
+			// grün an rot aus
+			GPIOG->ODR &= ~(1 << 6);
+			GPIOG->ODR |= (1 << 10);
+			// delay_ms(2000);
+			break;
+	}
+}
+
+volatile int faA = 0;
+
+void fahrzeugampel () {
+	switch(faA) {
+		case 0:
+			// rot/led3 an
+			GPIOG->ODR &= ~(1 << 10);
+			// delay_ms(3000);
+			break;
+		case 3:
+			// orange/led2 an
+			GPIOG->ODR &= ~(1 << 7);
+			// delay_ms(1000);
+			break;
+		case 4:
+			// rot/led3 aus, orange/led2 aus
+			GPIOG->ODR |= (1 << 10);
+			GPIOG->ODR |= (1 << 7);
+			GPIOG->ODR &= ~(1 << 6);
+			// delay_ms(3000);
+			break;
+		case 7:
+			// grün/led1 aus, orange/led2 an
+			GPIOG->ODR |= (1 << 6);
+			GPIOG->ODR &= ~(1 << 7);
+			// delay_ms(1000);
+			break;
+		case 8:
+			// orange/led2 aus
+			GPIOG->ODR &= ~(1 << 7);
+			break;
+	}
+}
+
+volatile int mode = 0;
+
+
+void EXTI15_10_IRQHandler() {
+	mode = !mode;
+
+	// reset ampel at switching
+	// fuA = 0;
+	// faA = 0;
+	// EXTI->PR = (1 << 13);
+	EXTI->PR |= (1 << 13);
+}
+
+void TIM2_IRQHandler() {
+	if (TIM2->SR & TIM_SR_UIF) {
+	        if (mode)
+	        {
+	            faA++;
+	            if (faA > 8)
+	                faA = 0;
+	        }
+	        else
+	        {
+	            fuA++;
+	            if (fuA > 6)
+	                fuA = 0;
+	        }
+
+	        TIM2->SR &= ~TIM_SR_UIF;
+	}
+}
 
 /**
   * @brief  The application entry point.
@@ -85,45 +119,55 @@ void delay_ms(uint16_t n) {
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+  // enable gpiog/c clock
+  RCC->AHB1ENR |= ((1 << 6) | (1 << 2));
+  // enable system configuration controller clock enable
+  RCC->APB2ENR |= (1 << 14);
+  // enable TIM2
+  RCC->APB1ENR |= (1 << 0);
+  // set pg6(grün), pg7(orange), pg10(rot), pg12(blau) as outputs
+  GPIOG->MODER &= ~((3 << (6*2)) | (3 << (10*2)) | (3 << (7*2)) | (3 << (12*2)));  // clear mode bits
+  GPIOG->MODER |=  ((1 << (6*2)) | (1 << (10*2)) | (1 << (7*2)) | (1 << (12*2)));  // 01 = output
+  // set pc13/B3 User Button as input (00 = input/reset)
+  GPIOC->MODER &= ~(3 << (13*2));
+  // reset user leds
+  GPIOG->ODR |= ((1 << 6) | (1 << 7) | (1 << 10) | (1 << 12));
+  // reset EXTI13 zu 0000
+  SYSCFG->EXTICR[3] &= ~(0xF << 4);
+  // Auswahl von PC13 als externe Interruptquelle
+  SYSCFG->EXTICR[3] |= (0x2 << 4);
 
-  /* USER CODE END SysInit */
+  // EXTI configuration
+  EXTI->IMR |= (1 << 13);
+  // enable falling trigger
+  EXTI->FTSR |= (1 << 13);
+  // disable rising trigger
+  EXTI->RTSR &= ~(1 << 13);
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  /* USER CODE BEGIN 2 */
-  int n_rot = 2000;
-  int n_grün = 4000;
-  /* USER CODE END 2 */
+  // Verknüpfung des Interrupts mit Routine
+  NVIC_EnableIRQ(EXTI15_10_IRQn);
+  __enable_irq();
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
-	delay_ms(n_rot);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_10 | GPIO_PIN_6);
-	delay_ms(n_grün);
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_10 | GPIO_PIN_6);
-    /* USER CODE BEGIN 3 */
+  // angenommen cpu takt 16MHz
+  TIM2->PSC = 16000 - 1;
+  // läuft jede sekunde über
+  TIM2->ARR = 1000 - 1;
+  // update interrupt enable für tim2
+  TIM2->DIER |= (1 << 0);
+
+  NVIC_EnableIRQ(TIM2_IRQn);
+  // start the timer
+  TIM2->CR1 |= (1 << 0);
+
+   while (1) {
+	  if (mode)
+		  fahrzeugampel();
+	  else
+		  fussgaengerampel();
   }
-  /* USER CODE END 3 */
 }
 
 /**
@@ -166,11 +210,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
@@ -185,19 +224,4 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-#ifdef USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */
+
