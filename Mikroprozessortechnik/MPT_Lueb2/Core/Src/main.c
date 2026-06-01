@@ -17,7 +17,6 @@ void delay_ms(uint16_t n) {
 	// bit 2=1: setzt clock source auf cortex clock
 	SysTick->CTRL = 0x5;
 
-
 	for(i = 0; i < n; i++) {
 		// while SysTick-CTRL-Registe & 0x10000 == 0
 		// solange das Count bit nicht gesetzt wird, bleibe in der Schleife
@@ -53,6 +52,7 @@ void fahrzeugampel () {
 		case 0:
 			// rot/led3 an
 			GPIOG->ODR &= ~(1 << 10);
+			GPIOG->ODR |= (1 << 7);
 			// delay_ms(3000);
 			break;
 		case 3:
@@ -73,10 +73,6 @@ void fahrzeugampel () {
 			GPIOG->ODR &= ~(1 << 7);
 			// delay_ms(1000);
 			break;
-		case 8:
-			// orange/led2 aus
-			GPIOG->ODR |= (1 << 7);
-			break;
 	}
 }
 
@@ -96,14 +92,12 @@ void EXTI15_10_IRQHandler() {
 
 void TIM2_IRQHandler() {
 	if (TIM2->SR & TIM_SR_UIF) {
-	        if (mode)
-	        {
+	        if (mode) {
 	            faA++;
 	            if (faA > 8)
 	                faA = 0;
 	        }
-	        else
-	        {
+	        else {
 	            fuA++;
 	            if (fuA > 6)
 	                fuA = 0;
@@ -117,10 +111,6 @@ void TIM5_IRQHandler() {
 	        if (!mode)
 	        {
 	        	GPIOG->ODR ^= (1 << 12);
-	        }
-	        else
-	        {
-	        	GPIOG->ODR |= (1 << 12);
 	        }
 	        TIM5->SR &= ~TIM_SR_UIF;
 	}
@@ -179,13 +169,19 @@ int main(void)
   TIM5->ARR = 125 - 1; // aus->an für 250 ms periode
   TIM5->DIER |= (1 << 0);
   NVIC_EnableIRQ(TIM5_IRQn);
+
   TIM2->CR1 |= 1;
    while (1) {
 	   if (mode) {
 		  TIM5->CR1 &= ~1;
+		  // if ((GPIOG->ODR & (1 << 12)) == 0) {
+		  GPIOG->ODR |= (1 << 12);
+		  // }
 		  fahrzeugampel();
 	  } else {
-		  TIM5->CR1 |= 1;
+		  if ((TIM5->CR1 &= 1) == 0) {
+			  TIM5->CR1 |= 1;
+		  }
 		  fussgaengerampel();
 	  }
    }
