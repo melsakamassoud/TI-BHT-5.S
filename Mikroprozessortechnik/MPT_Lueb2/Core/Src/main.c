@@ -75,7 +75,7 @@ void fahrzeugampel () {
 			break;
 		case 8:
 			// orange/led2 aus
-			GPIOG->ODR &= ~(1 << 7);
+			GPIOG->ODR |= (1 << 7);
 			break;
 	}
 }
@@ -87,8 +87,9 @@ void EXTI15_10_IRQHandler() {
 	mode = !mode;
 
 	// reset ampel at switching
-	// fuA = 0;
-	// faA = 0;
+	fuA = 0;
+	faA = 0;
+	// besser?
 	// EXTI->PR = (1 << 13);
 	EXTI->PR |= (1 << 13);
 }
@@ -107,10 +108,24 @@ void TIM2_IRQHandler() {
 	            if (fuA > 6)
 	                fuA = 0;
 	        }
-
 	        TIM2->SR &= ~TIM_SR_UIF;
 	}
 }
+
+void TIM5_IRQHandler() {
+	if (TIM5->SR & TIM_SR_UIF) {
+	        if (!mode)
+	        {
+	        	GPIOG->ODR ^= (1 << 12);
+	        }
+	        else
+	        {
+	        	GPIOG->ODR |= (1 << 12);
+	        }
+	        TIM5->SR &= ~TIM_SR_UIF;
+	}
+}
+
 
 /**
   * @brief  The application entry point.
@@ -127,7 +142,7 @@ int main(void)
   // enable system configuration controller clock enable
   RCC->APB2ENR |= (1 << 14);
   // enable TIM2
-  RCC->APB1ENR |= (1 << 0);
+  RCC->APB1ENR |= ((1 << 0) | (1 << 3));
   // set pg6(grün), pg7(orange), pg10(rot), pg12(blau) as outputs
   GPIOG->MODER &= ~((3 << (6*2)) | (3 << (10*2)) | (3 << (7*2)) | (3 << (12*2)));  // clear mode bits
   GPIOG->MODER |=  ((1 << (6*2)) | (1 << (10*2)) | (1 << (7*2)) | (1 << (12*2)));  // 01 = output
@@ -157,17 +172,23 @@ int main(void)
   TIM2->ARR = 1000 - 1;
   // update interrupt enable für tim2
   TIM2->DIER |= (1 << 0);
-
   NVIC_EnableIRQ(TIM2_IRQn);
   // start the timer
-  TIM2->CR1 |= (1 << 0);
 
+  TIM5->PSC = 16000 - 1;
+  TIM5->ARR = 125 - 1; // aus->an für 250 ms periode
+  TIM5->DIER |= (1 << 0);
+  NVIC_EnableIRQ(TIM5_IRQn);
+  TIM2->CR1 |= 1;
    while (1) {
-	  if (mode)
+	   if (mode) {
+		  TIM5->CR1 &= ~1;
 		  fahrzeugampel();
-	  else
+	  } else {
+		  TIM5->CR1 |= 1;
 		  fussgaengerampel();
-  }
+	  }
+   }
 }
 
 /**
