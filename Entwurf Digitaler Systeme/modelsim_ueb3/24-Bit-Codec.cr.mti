@@ -1,0 +1,20 @@
+{C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3/tb_wm8731.vhd} {1 {vcom -work work -2002 -explicit -stats=none {C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3/tb_wm8731.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity tb_wm8731
+-- Compiling architecture behav of tb_wm8731
+-- Loading package NUMERIC_STD
+-- Loading entity wm8731
+
+} {} {}} {C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/lab3_dds.vhd} {1 {vcom -work work -2002 -explicit -stats=none {C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/lab3_dds.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity dds
+-- Compiling architecture behavioral of dds
+
+} {} {}}

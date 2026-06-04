@@ -1,0 +1,65 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "leds_top[0]",
+					"strict" : false
+				},
+				{
+					"name" : "leds_top[1]",
+					"strict" : false
+				},
+				{
+					"name" : "leds_top[2]",
+					"strict" : false
+				},
+				{
+					"name" : "leds_top[3]",
+					"strict" : false
+				},
+				{
+					"name" : "i2c_sdat_top",
+					"strict" : false
+				},
+				{
+					"name" : "i2c_sclk_top",
+					"strict" : false
+				},
+				{
+					"name" : "aud_dacdat_top",
+					"strict" : false
+				},
+				{
+					"name" : "aud_daclrck_top",
+					"strict" : false
+				},
+				{
+					"name" : "keys_top[0]",
+					"strict" : false
+				},
+				{
+					"name" : "keys_top[1]",
+					"strict" : false
+				},
+				{
+					"name" : "keys_top[2]",
+					"strict" : false
+				},
+				{
+					"name" : "keys_top[3]",
+					"strict" : false
+				},
+				{
+					"name" : "rst_top",
+					"strict" : false
+				},
+				{
+					"name" : "sw_mode_top",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

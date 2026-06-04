@@ -1,0 +1,30 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /home/d/Desktop/Syncthing/Bht-Shaggy/Sem5/EDS/lab03/Quartus/PLL_WM8731_IP.qsys --block-symbol-file --output-directory=/home/d/Desktop/Syncthing/Bht-Shaggy/Sem5/EDS/lab03/Quartus/PLL_WM8731_IP --family="Cyclone IV E" --part=EP4CE115F29C7
+Progress: Loading Quartus/PLL_WM8731_IP.qsys
+Progress: Reading input file
+Progress: Adding audio_pll_0 [altera_up_avalon_audio_pll 18.0]
+Progress: Parameterizing module audio_pll_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /home/d/Desktop/Syncthing/Bht-Shaggy/Sem5/EDS/lab03/Quartus/PLL_WM8731_IP.qsys --synthesis=VHDL --output-directory=/home/d/Desktop/Syncthing/Bht-Shaggy/Sem5/EDS/lab03/Quartus/PLL_WM8731_IP/synthesis --family="Cyclone IV E" --part=EP4CE115F29C7
+Progress: Loading Quartus/PLL_WM8731_IP.qsys
+Progress: Reading input file
+Progress: Adding audio_pll_0 [altera_up_avalon_audio_pll 18.0]
+Progress: Parameterizing module audio_pll_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: PLL_WM8731_IP: Generating "PLL_WM8731_IP" for QUARTUS_SYNTH
+Info: audio_pll_0: "PLL_WM8731_IP" instantiated altera_up_avalon_audio_pll "audio_pll_0"
+Info: audio_pll: "audio_pll_0" instantiated altera_up_altpll "audio_pll"
+Info: reset_from_locked: "audio_pll_0" instantiated altera_up_avalon_reset_from_locked_signal "reset_from_locked"
+Info: PLL_WM8731_IP: Done "PLL_WM8731_IP" with 4 modules, 4 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

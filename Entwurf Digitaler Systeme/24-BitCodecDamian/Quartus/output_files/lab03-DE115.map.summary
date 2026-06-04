@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Wed Jun 03 14:45:14 2026
+Quartus Prime Version : 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name : lab03-DE115
+Top-level Entity Name : square_sin_wave_wm8731_top
+Family : Cyclone IV E
+Total logic elements : 280
+    Total combinational functions : 279
+    Dedicated logic registers : 116
+Total registers : 116
+Total pins : 17
+Total virtual pins : 0
+Total memory bits : 0
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1

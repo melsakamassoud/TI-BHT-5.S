@@ -1,0 +1,125 @@
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : -4.048
+TNS   : -122.326
+
+Type  : Slow 1200mV 85C Model Setup 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : -3.543
+TNS   : -61.991
+
+Type  : Slow 1200mV 85C Model Setup 'wm8731:wm8731_inst|i2c_clk'
+Slack : -2.039
+TNS   : -22.753
+
+Type  : Slow 1200mV 85C Model Hold 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : -0.229
+TNS   : -0.229
+
+Type  : Slow 1200mV 85C Model Hold 'wm8731:wm8731_inst|i2c_clk'
+Slack : 0.405
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : 0.458
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : -1.285
+TNS   : -30.840
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'wm8731:wm8731_inst|i2c_clk'
+Slack : -1.285
+TNS   : -17.990
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clock_50_top'
+Slack : 9.891
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : 26.832
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : -3.505
+TNS   : -105.475
+
+Type  : Slow 1200mV 0C Model Setup 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : -3.130
+TNS   : -54.314
+
+Type  : Slow 1200mV 0C Model Setup 'wm8731:wm8731_inst|i2c_clk'
+Slack : -1.769
+TNS   : -19.188
+
+Type  : Slow 1200mV 0C Model Hold 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : -0.330
+TNS   : -0.330
+
+Type  : Slow 1200mV 0C Model Hold 'wm8731:wm8731_inst|i2c_clk'
+Slack : 0.356
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : 0.413
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : -1.285
+TNS   : -30.840
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'wm8731:wm8731_inst|i2c_clk'
+Slack : -1.285
+TNS   : -17.990
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clock_50_top'
+Slack : 9.887
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : 26.819
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : -2.036
+TNS   : -61.454
+
+Type  : Fast 1200mV 0C Model Setup 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : -1.263
+TNS   : -18.307
+
+Type  : Fast 1200mV 0C Model Setup 'wm8731:wm8731_inst|i2c_clk'
+Slack : -0.494
+TNS   : -4.057
+
+Type  : Fast 1200mV 0C Model Hold 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : -0.134
+TNS   : -0.134
+
+Type  : Fast 1200mV 0C Model Hold 'wm8731:wm8731_inst|i2c_clk'
+Slack : 0.180
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : 0.207
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'square_sin_gen:square_sin_gen_inst|dds_en'
+Slack : -1.000
+TNS   : -24.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'wm8731:wm8731_inst|i2c_clk'
+Slack : -1.000
+TNS   : -14.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clock_50_top'
+Slack : 9.574
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'PLL_WM8731_inst|audio_pll_0|audio_pll|PLL_for_DE_Series_Boards|auto_generated|pll1|clk[0]'
+Slack : 26.904
+TNS   : 0.000
+
+------------------------------------------------------------

@@ -80,14 +80,11 @@ begin
    		-- i2c_sclk alterniert abhaengig von i2c_seq und i2c_bitcnt (zur Sonderbehandlung von Start- / Stopbedingung);
 		if i2c_seq = 0 then
 			i2c_seq <= 1;
-
-			i2c_sclk <= '0';
-			if i2c_bitcnt = 31 then
-				i2c_wordcnt <= i2c_wordcnt + 1;
-				i2c_bitcnt <= 0;
-			else 
-				i2c_bitcnt <= i2c_bitcnt + 1;
-			end if;			
+			if(i2c_bitcnt >= 2) and i2c_bitcnt <= 29 then 
+				i2c_sclk <= '0';
+			else
+				i2c_sclk <= '1';
+			end if;
 		elsif i2c_seq = 1 then
 			i2c_seq <= 2;
 
@@ -96,6 +93,12 @@ begin
 			i2c_seq <= 0;
 
 			i2c_sclk <= '0';
+			if i2c_bitcnt = 31 then
+				i2c_wordcnt <= i2c_wordcnt + 1;
+				i2c_bitcnt <= 0;
+			else 
+				i2c_bitcnt <= i2c_bitcnt + 1;
+			end if;		
 		end if;
 
    	-- Generierung der I2C Daten/bauen einer i2c message
@@ -173,6 +176,6 @@ end process;
 
 i2c_wrdcnt <= std_logic_vector(to_unsigned(i2c_wordcnt, 4));
 aud_xck  <= clk; -- gebe mclk/xck vor fuer codec
-aud_bclk <= clk; -- invertiere fuer dsp mode A fuer ein tak spaeter zu aud_daclrck
+aud_bclk <= not clk; -- invertiere fuer dsp mode A fuer ein tak spaeter zu aud_daclrck
 aud_dacdat <= s_din(31); -- fuettere codec serieller dateninput
 end behavioral;

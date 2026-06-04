@@ -1,0 +1,161 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+
+entity square_sin_gen is
+    port (
+        aud_xck : in  std_logic; -- 18,432 MHz Audio-Takt
+        rst : in  std_logic; -- System rst
+        keys : in  std_logic_vector(3 downto 0); -- Taster (KEY3 bis KEY0, Low-Aktiv)
+        sw_mode : in std_logic;
+
+        leds : out std_logic_vector(3 downto 0); -- Rote/Grüne LEDs für die Tasten
+        audio_out : out std_logic_vector(31 downto 0) -- 32-Bit Ausgang (16-Bit Links + 16-Bit Rechts)
+    );
+end square_sin_gen;
+
+architecture behavioral of square_sin_gen is
+
+    component my_dds is
+        port (
+            clk : in std_logic;
+            rst : in std_logic;
+            audio_out : out std_logic_vector(15 downto 0)
+        );
+    end component;
+
+    -- Amplituden-Konstanten im 16-Bit Zweierkomplement
+    constant AMP_HIGH : std_logic_vector(15 downto 0) := x"7FFF"; -- +32767 (Max. pos. Ausschlag)
+    constant AMP_LOW : std_logic_vector(15 downto 0) := x"8000"; -- -32768 (Max. neg. Ausschlag)
+    constant AMP_ZERO : std_logic_vector(15 downto 0) := x"0000"; -- Stille
+
+    -- Signal für den dynamischen Zähler-Endwert
+    signal max_count_square : integer range 0 to 8807 := 0; -- max valaue ist 8807;  -- Note C6 (1046,5 Hz)
+    signal max_count_dds : integer range 0 to 587  := 0; -- max wert: C6
+    
+    -- Interner Taktzähler
+    signal tone_cnt_square : integer range 0 to 8807 := 0;
+    signal tone_cnt_dds : integer range 0 to 587  := 0;
+    
+    signal square_sig : std_logic := '0'; -- Zustand Rechtecksignals 0 oder 1
+    signal dds_en : std_logic := '0'; -- eingang für sin dds
+    
+    -- Puffer für das aktuelle 16-Bit Tonsignal
+    signal current_sample : std_logic_vector(15 downto 0) := AMP_ZERO;
+    signal square_sample : std_logic_vector(15 downto 0);
+    signal dds_sample : std_logic_vector(15 downto 0);
+
+begin
+
+    process(keys)
+    begin
+        if keys(0) = '0' then
+            max_count_square <= 4403; -- C7
+            max_count_dds <= 294;
+            leds <= "0001"; -- LED0 
+
+        elsif keys(1) = '0' then
+            max_count_square <= 5878; -- G6
+            max_count_dds <= 392;
+            leds <= "0010"; -- LED1
+
+        elsif keys(2) = '0' then
+            max_count_square <= 6990; -- E6
+            max_count_dds <= 466;
+            leds <= "0100"; -- LED2 
+
+        elsif keys(3) = '0' then
+            max_count_square <= 8807; -- C6
+            max_count_dds    <= 587;
+            leds <= "1000"; -- LED3
+
+        else
+            max_count_square <= 0; -- Keine Taste gedrückt -> Stille
+            max_count_dds <= 0;
+            leds <= "0000"; -- LEDs aus
+        end if;
+    end process;
+
+    ------------------------------------------ Rechteck Signal Generator
+    process(rst, aud_xck)
+    begin
+        -- Reset
+        if rst = '1' then
+            tone_cnt_square <= 0;
+            square_sig <= '0';
+        
+        -- 
+        elsif rising_edge(aud_xck) then -- gleich zu aud_xck'event AND aud_xck = '1'
+            if max_count_square = 0 then -- kein key gedrückt
+                tone_cnt_square   <= 0;
+                square_sig <= '0';
+            else
+                -- Frequenzzähler läuft
+                if tone_cnt_square >= (max_count_square - 1) then -- max wert erreicht? -1 da bei 0 anfängt zu zählen
+                    tone_cnt_square <= 0;
+                    square_sig <= not square_sig; -- Signalzustand invertieren (Umschalten von High/Low)
+                else
+                    tone_cnt_square <= tone_cnt_square + 1;
+                end if;
+            end if;
+        end if;
+    end process;
+
+    square_sample <= AMP_HIGH when (max_count_square /= 0 and square_sig = '1') else -- Key gedrückt, Osz: H
+                      AMP_LOW  when (max_count_square /= 0 and square_sig = '0') else -- Key gedrückt, Osz: L
+                      AMP_ZERO; -- Kein key gedrückt
+
+
+    ------------------------------------------ sinus generator. 
+    -- dds ansteuern
+    process(rst, aud_xck)
+       begin
+            if rst = '1' then -- rst aktiv
+                tone_cnt_dds <= 0;
+                dds_en <= '0';
+
+            elsif rising_edge(aud_xck) then
+                dds_en <= '0';
+                if max_count_dds /= 0 then -- knopf gedrückt
+                    if tone_cnt_dds >= (max_count_dds - 1) then
+                        tone_cnt_dds <= 0;
+                        dds_en <= '1'; -- in dds clock -> nächster wert
+                    else
+                        tone_cnt_dds <= tone_cnt_dds + 1;
+                    end if;
+                else
+                    tone_cnt_dds <= 0;
+                end if;
+            end if;
+        end process;
+
+    dds_inst : my_dds
+        port map (
+            clk => dds_en,
+            rst => rst,
+            audio_out => dds_sample
+        );
+
+
+
+    -- AusgangsMUX
+    process(sw_mode, square_sample, dds_sample, max_count_dds)
+        begin
+        if max_count_dds = 0 then -- nichts es kann genau so gut max_count_square geprüft werden
+            current_sample <= AMP_ZERO;
+
+        elsif sw_mode = '1' then -- sinus 
+            current_sample <= dds_sample;
+
+        else -- rechteck
+            current_sample <= square_sample;
+        end if;
+    end process;
+
+
+            
+            
+    audio_out <= current_sample & current_sample; -- &: verkettungsoperator
+
+end behavioral;

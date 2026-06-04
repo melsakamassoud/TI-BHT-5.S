@@ -1,0 +1,96 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity square_wave_generator is
+    port (
+        aud_xck : in  std_logic; -- 18,432 MHz Audio-Takt
+        rst : in  std_logic; -- System rst
+        keys : in  std_logic_vector(3 downto 0); -- Taster (KEY3 bis KEY0, Low-Aktiv)
+
+        leds : out std_logic_vector(3 downto 0); -- Rote/Gr�ne LEDs f�r die Tasten
+        audio_out : out std_logic_vector(31 downto 0) -- 32-Bit Ausgang (16-Bit Links + 16-Bit Rechts)
+    );
+end square_wave_generator;
+
+architecture behavioral of square_wave_generator is
+    -- Amplituden-Konstanten im 16-Bit Zweierkomplement
+    constant AMP_HIGH : std_logic_vector(15 downto 0) := x"7FFF"; -- +32767 (Max. pos. Ausschlag)
+    constant AMP_LOW  : std_logic_vector(15 downto 0) := x"8000"; -- -32768 (Max. neg. Ausschlag)
+    constant AMP_ZERO : std_logic_vector(15 downto 0) := x"0000"; -- Stille
+
+    -- Signal f�r den dynamischen Z�hler-Endwert
+    signal max_count : integer range 0 to 8807 := 0; -- max valaue ist 8807;       -- Note C6 (1046,5 Hz)
+    
+    -- Interner Taktz�hler
+    signal tone_cnt : integer range 0 to 8807 := 0;
+    
+    -- Zustand Rechtecksignals 0 oder 1
+    signal square_sig : std_logic := '0';
+
+    -- Puffer f�r das aktuelle 16-Bit Tonsignal
+    signal current_sample : std_logic_vector(15 downto 0) := AMP_ZERO;
+
+begin
+
+    process(keys)
+    begin
+        if keys(0) = '0' then
+            max_count <= 4403; -- C7
+            leds <= "0001"; -- LED0 
+
+        elsif keys(1) = '0' then
+            max_count <= 5878; -- G6
+            leds <= "0010"; -- LED1
+
+        elsif keys(2) = '0' then
+            max_count <= 6990; -- E6
+            leds <= "0100"; -- LED2 
+
+        elsif keys(3) = '0' then
+            max_count <= 8807; -- C6
+            leds <= "1000"; -- LED3
+
+        else
+            max_count <= 0; -- Keine Taste gedr�ckt -> Stille
+            leds <= "0000"; -- LEDs aus
+        end if;
+    end process;
+
+    -- Rechteck Signal Generator
+    process(rst, aud_xck)
+    begin
+        -- Reset
+        if rst = '1' then
+            tone_cnt   <= 0;
+            square_sig <= '0';
+        
+        -- 
+        elsif rising_edge(aud_xck) then -- gleich zu aud_xck'event AND aud_xck = '1'
+            if max_count = 0 then -- kein key gedr�ckt
+                tone_cnt   <= 0;
+                square_sig <= '0';
+            else
+                -- Frequenzz�hler l�uft
+                if tone_cnt >= (max_count - 1) then -- max wert erreicht? -1 da bei 0 anf�ngt zu z�hlen
+                    tone_cnt   <= 0;
+                    square_sig <= not square_sig; -- Signalzustand invertieren (Umschalten von High/Low)
+                else
+                    tone_cnt <= tone_cnt + 1;
+                end if;
+            end if;
+        end if;
+    end process;
+
+
+    -- Ausgang MUX
+    current_sample <= AMP_HIGH when (max_count /= 0 and square_sig = '1') else -- Key gedr�ckt, Osz: H
+                      AMP_LOW  when (max_count /= 0 and square_sig = '0') else -- Key gedr�ckt, Osz: L
+                      AMP_ZERO; -- Kein key gedr�ckt
+
+
+            -- Da 16 + 16 bit (rechts und links)
+            -- f�r stereo: einfach signal duplizieren / verketten
+    audio_out <= current_sample & current_sample; -- &: verkettungsoperator
+
+end behavioral;
