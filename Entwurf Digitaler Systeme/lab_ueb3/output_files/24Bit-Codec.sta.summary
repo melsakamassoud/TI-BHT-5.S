@@ -2,40 +2,88 @@
 Timing Analyzer Summary
 ------------------------------------------------------------
 
-Type  : Slow 1200mV 85C Model Setup 'clk'
-Slack : -1.360
-TNS   : -13.361
+Type  : Slow 1200mV 85C Model Setup 'wm8731:wm8731|i2c_clk'
+Slack : -2.421
+TNS   : -20.431
 
-Type  : Slow 1200mV 85C Model Hold 'clk'
-Slack : 0.402
+Type  : Slow 1200mV 85C Model Setup 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.345
+TNS   : -0.345
+
+Type  : Slow 1200mV 85C Model Hold 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.329
+TNS   : -0.329
+
+Type  : Slow 1200mV 85C Model Hold 'wm8731:wm8731|i2c_clk'
+Slack : 0.404
 TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'wm8731:wm8731|i2c_clk'
+Slack : -1.285
+TNS   : -17.990
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk'
-Slack : -3.000
-TNS   : -19.705
-
-Type  : Slow 1200mV 0C Model Setup 'clk'
-Slack : -1.120
-TNS   : -10.707
-
-Type  : Slow 1200mV 0C Model Hold 'clk'
-Slack : 0.354
+Slack : 9.925
 TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 26.835
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'wm8731:wm8731|i2c_clk'
+Slack : -2.094
+TNS   : -17.167
+
+Type  : Slow 1200mV 0C Model Setup 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.060
+TNS   : -0.060
+
+Type  : Slow 1200mV 0C Model Hold 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.531
+TNS   : -0.531
+
+Type  : Slow 1200mV 0C Model Hold 'wm8731:wm8731|i2c_clk'
+Slack : 0.356
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'wm8731:wm8731|i2c_clk'
+Slack : -1.285
+TNS   : -17.990
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk'
-Slack : -3.000
-TNS   : -19.705
-
-Type  : Fast 1200mV 0C Model Setup 'clk'
-Slack : -0.156
-TNS   : -0.820
-
-Type  : Fast 1200mV 0C Model Hold 'clk'
-Slack : 0.181
+Slack : 9.891
 TNS   : 0.000
 
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 26.835
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'wm8731:wm8731|i2c_clk'
+Slack : -0.668
+TNS   : -2.915
+
+Type  : Fast 1200mV 0C Model Setup 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.014
+TNS   : -0.014
+
+Type  : Fast 1200mV 0C Model Hold 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : -0.295
+TNS   : -0.295
+
+Type  : Fast 1200mV 0C Model Hold 'wm8731:wm8731|i2c_clk'
+Slack : 0.179
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'wm8731:wm8731|i2c_clk'
+Slack : -1.000
+TNS   : -14.000
+
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk'
-Slack : -3.000
-TNS   : -16.832
+Slack : 9.946
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk_18MHz|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 26.905
+TNS   : 0.000
 
 ------------------------------------------------------------

@@ -1,0 +1,50 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.math_real.all;
+
+
+package dds_pkg is
+
+
+	 type integer_array_t is array (natural range <>) of integer;
+
+    function init_sine_lut(
+        addr_bits : positive;
+        data_bits : positive
+    ) return lut_t;
+
+end package;
+
+package body dds_pkg is
+
+    function make_quarter_sine_lut(
+        addr_bits : positive;
+        data_bits : positive
+    ) return integer_array_t is
+
+        constant LUT_SIZE : integer := 2**(addr_bits-2);
+        constant AMP      : real := real(2**(data_bits-1)-1);
+
+        variable lut : integer_array_t(0 to LUT_SIZE-1);
+
+    begin
+
+        for i in lut'range loop
+            lut(i) :=
+                integer(
+                    round(
+                        AMP *
+                        sin(
+                            real(i) * math_pi /
+                            (2.0 * real(LUT_SIZE))
+                        )
+                    )
+                );
+        end loop;
+
+        return lut;
+
+    end function;
+
+end package body;

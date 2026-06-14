@@ -38,7 +38,7 @@ signal s_lrswitch : integer range 0 to 2303; -- wieso 2303?
 signal i2c_clkdiv : std_logic_vector(5 downto 0);
 signal i2c_clk : std_logic; -- generated i2c_clock from clk
 signal i2c_seq : integer range 0 to 2;
-signal i2c_bitcnt : integer range 0 to 31; -- übertrage immer 32 bit
+signal i2c_bitcnt : integer range 0 to 31; -- ï¿½bertrage immer 32 bit
 signal i2c_wordcnt :integer range 0 to 8; -- wie die Anzahl zu konfigurierender Register
 
 begin
@@ -77,26 +77,36 @@ begin
 		i2c_sdat <= 'Z';
 	else
 		-- Generierung des I2C Takt
-   		-- i2c_sclk alterniert abhaengig von i2c_seq und i2c_bitcnt (zur Sonderbehandlung von Start- / Stopbedingung);
-		if i2c_seq = 0 then
-			i2c_seq <= 1;
+			-- i2c_sclk alterniert abhaengig von i2c_seq und i2c_bitcnt (zur Sonderbehandlung von Start- / Stopbedingung);
+		
+			if i2c_seq = 0 then
+					i2c_seq <= 1;
+				if i2c_bitcnt > 1 and i2c_bitcnt <= 29 then
+					i2c_sclk <= '0';
+				else 
+					i2c_sclk <= '1';
+				end if;
+		
+			elsif i2c_seq = 1 then
+				i2c_seq <= 2;
 
-			i2c_sclk <= '0';
-			if i2c_bitcnt = 31 then
-				i2c_wordcnt <= i2c_wordcnt + 1;
-				i2c_bitcnt <= 0;
-			else 
-				i2c_bitcnt <= i2c_bitcnt + 1;
-			end if;			
-		elsif i2c_seq = 1 then
-			i2c_seq <= 2;
+				i2c_sclk <= '1';
+			elsif i2c_seq = 2 then
+				i2c_seq <= 0;
+				
+				if i2c_bitcnt > 1 and i2c_bitcnt <= 29 then
+					i2c_sclk <= '0';	
+				else
+					i2c_sclk <= '1';
+				end if;
 
-			i2c_sclk <= '1';
-		elsif i2c_seq = 2 then
-			i2c_seq <= 0;
-
-			i2c_sclk <= '0';
-		end if;
+				if i2c_bitcnt = 31 then
+					i2c_wordcnt <= i2c_wordcnt + 1;
+					i2c_bitcnt <= 0;
+				else 
+					i2c_bitcnt <= i2c_bitcnt + 1;
+				end if;
+			end if;
 
    	-- Generierung der I2C Daten/bauen einer i2c message
 	case i2c_bitcnt is

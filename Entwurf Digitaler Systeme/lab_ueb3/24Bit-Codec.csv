@@ -1,0 +1,42 @@
+# Copyright (C) 2020  Intel Corporation. All rights reserved.
+# Your use of Intel Corporation's design tools, logic functions 
+# and other software and tools, and any partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Intel Program License 
+# Subscription Agreement, the Intel Quartus Prime License Agreement,
+# the Intel FPGA IP License Agreement, or other applicable license
+# agreement, including, without limitation, that your use is for
+# the sole purpose of programming logic devices manufactured by
+# Intel and sold by Intel or its authorized distributors.  Please
+# refer to the applicable agreement for further details, at
+# https://fpgasoftware.intel.com/eula.
+
+# Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+# File: C:\Users\Mustafa\source\repos\TI-BHT-5.S\Entwurf Digitaler Systeme\lab_ueb3\24Bit-Codec.csv
+# Generated on: Wed Jun 10 13:32:25 2026
+
+# Note: The column header names should not be changed if you wish to import this .csv file into the Quartus Prime software.
+
+To,Direction,Location,I/O Bank,VREF Group,Fitter Location,I/O Standard,Reserved,Current Strength,Slew Rate,Differential Pair,Strict Preservation
+aud_bclk,Output,PIN_F2,1,B1_N1,PIN_F28,,,,,,
+aud_dacdat,Output,PIN_D1,1,B1_N0,PIN_H17,,,,,,
+aud_daclrck,Output,PIN_E3,1,B1_N0,PIN_G16,,,,,,
+aud_xck,Output,PIN_E1,1,B1_N0,PIN_AE5,,,,,,
+clk,Input,PIN_Y2,2,B2_N0,PIN_J1,,,,,,
+einstellwert_input[7],Input,PIN_AC28,5,B5_N2,PIN_F15,,,,,,
+einstellwert_input[6],Input,PIN_AC27,5,B5_N2,PIN_B17,,,,,,
+einstellwert_input[5],Input,PIN_AD27,5,B5_N2,PIN_J15,,,,,,
+einstellwert_input[4],Input,PIN_AB27,5,B5_N1,PIN_A17,,,,,,
+einstellwert_input[3],Input,PIN_AC26,5,B5_N2,PIN_E15,,,,,,
+einstellwert_input[2],Input,PIN_AB25,5,B5_N1,PIN_H15,,,,,,
+einstellwert_input[1],Input,PIN_AC24,5,B5_N2,PIN_D15,,,,,,
+einstellwert_input[0],Input,PIN_AB24,5,B5_N2,PIN_C15,,,,,,
+i2c_sclk,Output,PIN_B7,8,B8_N1,PIN_D12,,,,,,
+i2c_sdat,Output,PIN_A8,8,B8_N1,PIN_D13,,,,,,
+i2c_wrdcnt[3],Output,,,,PIN_C12,,,,,,
+i2c_wrdcnt[2],Output,,,,PIN_D14,,,,,,
+i2c_wrdcnt[1],Output,,,,PIN_C13,,,,,,
+i2c_wrdcnt[0],Output,,,,PIN_C14,,,,,,
+reset,Input,PIN_AB28,5,B5_N1,PIN_AH14,,,,,,

@@ -1,0 +1,68 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity top is
+port(
+clk : in std_logic;
+reset : in std_logic;
+i2c_sdat : out std_logic; -- I2C serieller Datenkanal	
+i2c_sclk : out std_logic; -- I2C serielle Clock
+aud_xck : out std_logic; -- WM8731 Referenztakt (siehe Register 8 Programmierung)
+aud_bclk : out std_logic; -- Audio Bit Clock
+aud_dacdat : out std_logic; -- DAC Daten
+aud_daclrck : out std_logic; -- Links / Rechts
+i2c_wrdcnt : out std_logic_vector (3 downto 0);
+einstellwert_input : in std_logic_vector(7 downto 0);
+dataout : out std_logic_vector(15 downto 0) := (others => '0')
+);
+end top;
+
+
+architecture arch of top is
+
+signal data : std_logic_vector(15 downto 0) := (others => '0');
+signal data_lr : std_logic_vector(31 downto 0);
+signal s_clk_18mhz : std_logic;
+
+begin
+
+dataout <= data;
+data_lr <= data & data;
+
+clk_18MHz : entity work.pll_18m(SYN)
+port map (
+		areset => '0', -- : IN STD_LOGIC  := '0';
+		inclk0 => clk, -- : IN STD_LOGIC  := '0';
+		c0 => s_clk_18mhz, -- : OUT STD_LOGIC ;
+		locked => open -- : OUT STD_LOGIC 
+	);
+
+dds_gen : entity work.dds_gen(arch)
+generic map(
+addr_width => 10, -- : integer RANGE 6 TO 12 := 10;
+-- ein Bit mehr für das Vorzeichen
+data_width => 16 -- 512 werte, : integer := 11
+)
+port map(
+clk => s_clk_18mhz, 
+reset => reset, -- : IN std_logic;
+einstellwert_input => einstellwert_input,-- : in std_logic_vector(7 downto 0);
+data_a => data -- : OUT std_logic_vector(data_width-1 DOWNTO 0));
+);
+
+wm8731 : entity work.wm8731(behavioral)
+port map(
+clk => s_clk_18mhz, -- 18,432 MHz 
+reset => reset, -- : in std_logic; -- Takteingang (entsprechend 18,432 MHz fuer WM8731)
+din => data_lr, -- : in std_logic_vector(31 downto 0); -- Audiodaten: 16 Bit linker Kanal + 16 Bit rechter Kanal (dds/rechtecksignal)
+i2c_sdat => i2c_sdat, -- : out std_logic; -- I2C serieller Datenkanal	
+i2c_sclk => i2c_sclk, -- : out std_logic; -- I2C serielle Clock
+aud_xck => aud_xck, -- : out std_logic; -- WM8731 Referenztakt (siehe Register 8 Programmierung)
+aud_bclk => aud_bclk, -- : out std_logic; -- Audio Bit Clock
+aud_dacdat => aud_dacdat, -- : out std_logic; -- DAC Daten
+aud_daclrck => aud_daclrck, -- : out std_logic; -- Links / Rechts
+i2c_wrdcnt => i2c_wrdcnt -- : out std_logic_vector (3 downto 0)
+);
+
+end arch;

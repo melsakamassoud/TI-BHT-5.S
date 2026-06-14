@@ -7,40 +7,43 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-dC:/intelFPGA/18.1
+Z0 dC:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3
 Edds
-Z0 w1780471078
-Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
-Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
-Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
-Z4 dC:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3
-Z5 8C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/lab3_dds.vhd
-Z6 FC:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/lab3_dds.vhd
+Z1 w1781041613
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8../24-BitCodec/dds.vhd
+Z6 F../24-BitCodec/dds.vhd
 l0
-L16
-VAjON[ZQ443eam=zeK1XL<3
-!s100 D1ochVa[GMfTlT=C6Ng0[0
+L6
+V6i4n@6KCaj=DUdV_YMLYc0
+!s100 ^];V4<k9_GWE2ig@ZW85:2
 Z7 OV;C;10.5b;63
-32
-Z8 !s110 1780483020
+33
+Z8 !s110 1781098493
 !i10b 1
-Z9 !s108 1780483019.000000
-Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/lab3_dds.vhd|
-Z11 !s107 C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/lab3_dds.vhd|
+Z9 !s108 1781098493.000000
+Z10 !s90 -reportprogress|300|-2008|../24-BitCodec/dds.vhd|
+Z11 !s107 ../24-BitCodec/dds.vhd|
 !i113 1
-Z12 o-work work -2002 -explicit
+Z12 o-2008
 Z13 tExplicit 1 CvgOpt 0
-Abehavioral
-R1
+Aarch
+Z14 DPx4 work 7 dds_pkg 0 22 M4MaFRPCd?Pak>Nb2R@2S1
+Z15 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+Z16 DEx4 work 7 dds_lut 0 22 UjW3Ca4`Z<B:b`UIPP<6L2
 R2
 R3
-DEx4 work 3 dds 0 22 AjON[ZQ443eam=zeK1XL<3
-l35
-L22
-VBliC>3@REW_1QP`9M6BTm3
-!s100 :bc6FSQAQ_AbVgC^AkL]H0
+R4
+Z17 DEx4 work 3 dds 0 22 6i4n@6KCaj=DUdV_YMLYc0
+l27
+L18
+VkT9@5]lkjB0gb40Odl9]O2
+!s100 G17nmMg:Bm;]lGDP=I=DV2
 R7
-32
+33
 R8
 !i10b 1
 R9
@@ -49,85 +52,300 @@ R11
 !i113 1
 R12
 R13
-Etb_wm8731
-Z14 w1780432326
+Edds_gen
+Z18 w1781042507
 R2
 R3
 R4
-Z15 8C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3/tb_wm8731.vhd
-Z16 FC:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3/tb_wm8731.vhd
+R0
+Z19 8../24-BitCodec/dds_gen.vhd
+Z20 F../24-BitCodec/dds_gen.vhd
 l0
-L4
-Vn[9O:cYg3C7XnQ=_6P4@83
-!s100 d[emPo@@2blONk6WF[CgR0
+L6
+V^6Z6OO5geLAm[1G?0nN1?2
+!s100 @LB63f4GK]UBO@Mc02S2<3
 R7
-32
-Z17 !s110 1780486543
+33
+Z21 !s110 1781098495
 !i10b 1
-Z18 !s108 1780486543.000000
-Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3/tb_wm8731.vhd|
-Z20 !s107 C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/modelsim_ueb3/tb_wm8731.vhd|
+Z22 !s108 1781098495.000000
+Z23 !s90 -reportprogress|300|-2008|../24-BitCodec/dds_gen.vhd|
+Z24 !s107 ../24-BitCodec/dds_gen.vhd|
 !i113 1
 R12
 R13
-Abehav
-R1
-Z21 DEx4 work 6 wm8731 0 22 Q_0e0j6]DgbI[49j`W4<V3
+Aarch
+R17
 R2
 R3
-Z22 DEx4 work 9 tb_wm8731 0 22 n[9O:cYg3C7XnQ=_6P4@83
-l20
-L7
-Z23 V?X_A^DMoXf^U?NLib6YCH2
-Z24 !s100 ;2IA_^:Kz4JDl=QWYc:8W1
+R4
+Z25 DEx4 work 7 dds_gen 0 22 ^6Z6OO5geLAm[1G?0nN1?2
+l23
+L17
+V2`8NQI2ah>><R^bJJPiE`3
+!s100 eLV^gM5g>K@QX:?k9m0i03
 R7
-32
-R17
+33
+R21
 !i10b 1
-R18
-R19
-R20
+R22
+R23
+R24
+!i113 1
+R12
+R13
+Edds_lut
+Z26 w1781045308
+R14
+R15
+R2
+R3
+R4
+R0
+Z27 8../24-BitCodec/dds_lut.vhd
+Z28 F../24-BitCodec/dds_lut.vhd
+l0
+L7
+VUjW3Ca4`Z<B:b`UIPP<6L2
+!s100 EcM^1B[N=oki4NVJ1Y?b20
+R7
+33
+Z29 !s110 1781098490
+!i10b 1
+Z30 !s108 1781098490.000000
+Z31 !s90 -reportprogress|300|-2008|../24-BitCodec/dds_lut.vhd|
+Z32 !s107 ../24-BitCodec/dds_lut.vhd|
+!i113 1
+R12
+R13
+Aarch
+R14
+R15
+R2
+R3
+R4
+R16
+l26
+L18
+Vo3@0^7`M;TH>PS<LO:dih0
+!s100 34a2CY<]JOG>5S1JKVGT82
+R7
+33
+R29
+!i10b 1
+R30
+R31
+R32
+!i113 1
+R12
+R13
+Pdds_pkg
+R15
+R2
+R3
+R4
+Z33 w1781045871
+R0
+Z34 8../24-BitCodec/dds_pkg.vhd
+Z35 F../24-BitCodec/dds_pkg.vhd
+l0
+L7
+VM4MaFRPCd?Pak>Nb2R@2S1
+!s100 jVK>zaGWd4H^jS<K8fJP]1
+R7
+33
+b1
+Z36 !s110 1781098488
+!i10b 1
+Z37 !s108 1781098488.000000
+Z38 !s90 -reportprogress|300|-2008|../24-BitCodec/dds_pkg.vhd|
+Z39 !s107 ../24-BitCodec/dds_pkg.vhd|
+!i113 1
+R12
+R13
+Bbody
+R14
+R15
+R2
+R3
+R4
+l0
+L18
+V8R<kCEH4bTOYEJkc]V0e70
+!s100 XcZZ6?<5E>RJHOQfI;]PZ2
+R7
+33
+R36
+!i10b 1
+R37
+R38
+R39
+!i113 1
+R12
+R13
+Epll_18m
+Z40 w1781088558
+R3
+R4
+R0
+Z41 8../lab_ueb3/pll_18m.vhd
+Z42 F../lab_ueb3/pll_18m.vhd
+l0
+L43
+VdMz6ifLnMCWK>ajI@k3cC0
+!s100 5J53hIZzBFzFoa@`nT7F=3
+R7
+33
+Z43 !s110 1781098499
+!i10b 1
+Z44 !s108 1781098499.000000
+Z45 !s90 -reportprogress|300|-2008|../lab_ueb3/pll_18m.vhd|
+Z46 !s107 ../lab_ueb3/pll_18m.vhd|
+!i113 1
+R12
+R13
+Asyn
+R3
+R4
+Z47 DEx4 work 7 pll_18m 0 22 dMz6ifLnMCWK>ajI@k3cC0
+l132
+L54
+V8JjI9TTMVag4h3O^gG_823
+!s100 2C[S>LeS9L6`:P?L1U7N02
+R7
+33
+R43
+!i10b 1
+R44
+R45
+R46
+!i113 1
+R12
+R13
+Etb_top
+Z48 w1781095421
+R2
+R3
+R4
+R0
+Z49 8tb_top.vhd
+Z50 Ftb_top.vhd
+l0
+L5
+V`miP:fHAKmOHjD]8@heFW3
+!s100 On`=P9bPU;hk_OEB72?470
+R7
+33
+Z51 !s110 1781265885
+!i10b 1
+Z52 !s108 1781265885.000000
+Z53 !s90 -reportprogress|300|-2008|tb_top.vhd|
+Z54 !s107 tb_top.vhd|
+!i113 1
+R12
+R13
+Aarch
+Z55 DEx4 work 3 top 0 22 M?8[20gPiMb6ba7A?fUmR1
+R2
+R3
+R4
+DEx4 work 6 tb_top 0 22 `miP:fHAKmOHjD]8@heFW3
+l21
+L8
+VIfX0C7<54lc:2_<>3[MN>0
+!s100 L[`=292Sd:F4nC6HoUMQg2
+R7
+33
+R51
+!i10b 1
+R52
+R53
+R54
+!i113 1
+R12
+R13
+Etop
+Z56 w1781098334
+R2
+R3
+R4
+R0
+Z57 8../lab_ueb3/top.vhd
+Z58 F../lab_ueb3/top.vhd
+l0
+L5
+VM?8[20gPiMb6ba7A?fUmR1
+!s100 Tl_JQH6VY]TVNgRnd^OJe2
+R7
+33
+Z59 !s110 1781268521
+!i10b 1
+Z60 !s108 1781268521.000000
+Z61 !s90 -reportprogress|300|-2008|../lab_ueb3/top.vhd|
+Z62 !s107 ../lab_ueb3/top.vhd|
+!i113 1
+R12
+R13
+Aarch
+Z63 DEx4 work 6 wm8731 0 22 N96:;X[47NR;8KSI=ia490
+R25
+R47
+R2
+R3
+R4
+R55
+l28
+L22
+Z64 V:no0WkJN`h]^YMYWo<PXj0
+Z65 !s100 ::i4=_E6d;SOm]WkB4jQE0
+R7
+33
+R59
+!i10b 1
+R60
+R61
+R62
 !i113 1
 R12
 R13
 Ewm8731
-Z25 w1780486535
-R1
+Z66 w1781268440
 R2
 R3
 R4
-Z26 8C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/wm8731.vhd
-Z27 FC:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/wm8731.vhd
+R0
+Z67 8../24-BitCodec/wm8731.vhd
+Z68 F../24-BitCodec/wm8731.vhd
 l0
 L5
-VQ_0e0j6]DgbI[49j`W4<V3
+VN96:;X[47NR;8KSI=ia490
 !s100 2<20o;P<;K@28ooQCd86D3
 R7
-32
-R17
+33
+Z69 !s110 1781268512
 !i10b 1
-R18
-Z28 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/wm8731.vhd|
-Z29 !s107 C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/24-BitCodec/wm8731.vhd|
+Z70 !s108 1781268512.000000
+Z71 !s90 -reportprogress|300|-2008|../24-BitCodec/wm8731.vhd|
+Z72 !s107 ../24-BitCodec/wm8731.vhd|
 !i113 1
 R12
 R13
 Abehavioral
-R1
 R2
 R3
-R21
+R4
+R63
 l44
 L18
-V]D^ZDlGZ:4V[i@M9EcXUX2
-!s100 oOTFhX;^_`iLbeS5[HCil0
+V5meEbmle<EOScQT7;ZT331
+!s100 mjQ8EQo6JjJNcAm5<GhG^2
 R7
-32
-R17
+33
+R69
 !i10b 1
-R18
-R28
-R29
+R70
+R71
+R72
 !i113 1
 R12
 R13
