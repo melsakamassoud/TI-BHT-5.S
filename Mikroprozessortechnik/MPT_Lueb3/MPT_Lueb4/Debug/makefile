@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := MPT_Lueb2
+BUILD_ARTIFACT_NAME := MPT_Lueb4
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-MPT_Lueb2.elf \
+MPT_Lueb4.elf \
 
 MAP_FILES += \
-MPT_Lueb2.map \
+MPT_Lueb4.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-MPT_Lueb2.list \
+MPT_Lueb4.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: MPT_Lueb2.elf secondary-outputs
+main-build: MPT_Lueb4.elf secondary-outputs
 
 # Tool invocations
-MPT_Lueb2.elf MPT_Lueb2.map: $(OBJS) $(USER_OBJS) C:\Users\Mustafa\ M\source\repos\TI-BHT-5.S\Mikroprozessortechnik\MPT_Lueb2\STM32F429NIHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "MPT_Lueb2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Mustafa M\source\repos\TI-BHT-5.S\Mikroprozessortechnik\MPT_Lueb2\STM32F429NIHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MPT_Lueb2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+MPT_Lueb4.elf MPT_Lueb4.map: $(OBJS) $(USER_OBJS) C:\Users\Mustafa\ M\source\repos\TI-BHT-5.S\Mikroprozessortechnik\MPT_Lueb3\MPT_Lueb4\STM32F429NIHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MPT_Lueb4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Mustafa M\source\repos\TI-BHT-5.S\Mikroprozessortechnik\MPT_Lueb3\MPT_Lueb4\STM32F429NIHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MPT_Lueb4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-MPT_Lueb2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "MPT_Lueb2.list"
+MPT_Lueb4.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "MPT_Lueb4.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) MPT_Lueb2.elf MPT_Lueb2.list MPT_Lueb2.map default.size.stdout
+	-$(RM) MPT_Lueb4.elf MPT_Lueb4.list MPT_Lueb4.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
