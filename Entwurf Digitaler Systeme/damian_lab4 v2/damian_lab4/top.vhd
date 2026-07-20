@@ -1,0 +1,137 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity top is
+port(
+    clk                : in std_logic;
+    reset              : in std_logic;
+    switch_echo        : in std_logic;
+	 audio_sel			  : in std_logic;
+    led_echo           : out std_logic; 
+	 led_audio_sel		  : out std_logic;
+    led_keys           : out std_logic_vector(3 downto 0);
+	 led_key_signal     : out std_logic;
+    i2c_sdat           : out std_logic; -- I2C serieller Datenkanal	
+    i2c_sclk           : out std_logic; -- I2C serielle Clock
+    aud_xck            : out std_logic; -- WM8731 Referenztakt (siehe Register 8 Programmierung)
+    aud_bclk           : out std_logic; -- Audio Bit Clock
+    aud_dacdat         : out std_logic; -- DAC Daten
+    aud_daclrck        : out std_logic; -- Links / Rechts
+    keys               : in std_logic_vector(3 downto 0)
+);
+end top;
+
+
+architecture arch of top is
+
+-- data clk signals
+signal dds_data : std_logic_vector(15 downto 0) := (others => '0');
+
+-- delay signals
+signal data_delay : std_logic_vector(15 downto 0);
+signal sample_strobe : std_logic;
+-- button configurable
+signal einstellwert_internal : std_logic_vector(7 downto 0);
+
+-- rectangle generator
+signal rect_data : std_logic_vector(31 downto 0) := (others => '0');
+
+-- audio signal
+signal audio_in : std_logic_vector(15 downto 0) := (others => '0');
+
+-- audio codec
+signal data_lr : std_logic_vector(31 downto 0);
+signal s_clk_18mhz : std_logic;
+signal lr_clk : std_logic;
+
+begin
+
+clk_18MHz : entity work.pll_18m(SYN)
+port map (
+    areset => '0', -- : IN STD_LOGIC  := '0';
+    inclk0 => clk, -- : IN STD_LOGIC  := '0';
+    c0 => s_clk_18mhz, -- : OUT STD_LOGIC ;
+    locked => open -- : OUT STD_LOGIC 
+);
+
+---------------------------------------------------------------------------------------------------------
+
+-- Map 4 keys to preset DDS increment values (for addr_width=10 -> 2^20 scaling)
+-- keys(0)=C6, keys(1)=E6, keys(2)=G6, keys(3)=C7
+-- Precomputed increments (round): C6=60, E6=75, G6=89, C7=119
+process(keys)
+begin
+	einstellwert_internal <= (others => '0');
+
+    if keys(3) = '0' then
+        einstellwert_internal <= std_logic_vector(to_unsigned(119, 8));
+    elsif keys(2) = '0' then
+        einstellwert_internal <= std_logic_vector(to_unsigned(89, 8));
+    elsif keys(1) = '0' then
+        einstellwert_internal <= std_logic_vector(to_unsigned(75, 8));
+    elsif keys(0) = '0' then
+        einstellwert_internal <= std_logic_vector(to_unsigned(60, 8)); 
+	 end if;
+end process;
+
+
+dds_gen : entity work.dds_gen(arch)
+generic map(
+    addr_width => 10, -- : integer RANGE 6 TO 12 := 10;
+    -- ein Bit mehr für das Vorzeichen
+    data_width => 16 -- 512 werte, : integer := 11
+)
+port map(
+    clk => s_clk_18mhz, 
+    reset => reset, -- : IN std_logic;
+    einstellwert_input => einstellwert_internal, -- fest gemacht an key einstellwerten
+    data_a => dds_data -- asynchron an data_lr weitergegeben
+);
+
+
+delay : entity work.audio_delay
+port map(
+    clk           => s_clk_18mhz,
+    reset         => reset,
+    sample_strobe => lr_clk,
+    switch_echo   => switch_echo,
+    led_echo      => led_echo,
+    audio_in      => dds_data, -- kommt vom dds
+    audio_out     => data_delay -- wird and codec gegeben
+);
+
+---------------------------------------------------------------------------------------------------------
+rect_gen : entity work.square_gen
+port map(
+	aud_xck => s_clk_18mhz,
+	rst => reset,
+	keys => keys,
+	leds => open,
+	audio_out => rect_data,	-- left and right channel
+	square_sig => led_key_signal
+);
+---------------------------------------------------------------------------------------------------------
+
+-- left and right channel
+data_lr <= rect_data when audio_sel = '0' else data_delay & data_delay;
+
+led_keys <= NOT keys;
+
+aud_daclrck <= lr_clk;
+
+wm8731 : entity work.wm8731(behavioral)
+port map(
+    clk => s_clk_18mhz, -- 18,432 MHz 
+    reset => reset, -- : in std_logic; -- Takteingang (entsprechend 18,432 MHz fuer WM8731)
+    din => data_lr, -- : in std_logic_vector(31 downto 0); -- Audiodaten: 16 Bit linker Kanal + 16 Bit rechter Kanal (dds/rechtecksignal)
+    i2c_sdat => i2c_sdat, -- : out std_logic; -- I2C serieller Datenkanal	
+    i2c_sclk => i2c_sclk, -- : out std_logic; -- I2C serielle Clock
+    aud_xck => aud_xck, -- : out std_logic; -- WM8731 Referenztakt (siehe Register 8 Programmierung)
+    aud_bclk => aud_bclk, -- : out std_logic; -- Audio Bit Clock
+    aud_dacdat => aud_dacdat, -- : out std_logic; -- DAC Daten
+    aud_daclrck => lr_clk, -- : out std_logic; -- Links / Rechts clk, wird an audio delay gegeben
+    i2c_wrdcnt => open -- : out std_logic_vector (3 downto 0)
+);
+
+end arch;

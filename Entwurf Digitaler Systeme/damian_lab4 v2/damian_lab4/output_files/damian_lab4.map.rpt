@@ -1,0 +1,209 @@
+Analysis & Synthesis report for damian_lab4
+Thu Jul 09 17:42:36 2026
+Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2020  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+
+
+
++----------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                     ;
++------------------------------------+---------------------------------------------+
+; Analysis & Synthesis Status        ; Failed - Thu Jul 09 17:42:36 2026           ;
+; Quartus Prime Version              ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
+; Revision Name                      ; damian_lab4                                 ;
+; Top-level Entity Name              ; top                                         ;
+; Family                             ; Cyclone IV E                                ;
+; Total logic elements               ; N/A until Partition Merge                   ;
+;     Total combinational functions  ; N/A until Partition Merge                   ;
+;     Dedicated logic registers      ; N/A until Partition Merge                   ;
+; Total registers                    ; N/A until Partition Merge                   ;
+; Total pins                         ; N/A until Partition Merge                   ;
+; Total virtual pins                 ; N/A until Partition Merge                   ;
+; Total memory bits                  ; N/A until Partition Merge                   ;
+; Embedded Multiplier 9-bit elements ; N/A until Partition Merge                   ;
+; Total PLLs                         ; N/A until Partition Merge                   ;
++------------------------------------+---------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                              ;
++------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                           ; Setting            ; Default Value      ;
++------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                           ; EP4CE115F29C7      ;                    ;
+; Top-level entity name                                            ; top                ; damian_lab4        ;
+; Family name                                                      ; Cyclone IV E       ; Cyclone V          ;
+; Maximum processors allowed for parallel compilation              ; All                ;                    ;
+; VHDL Show LMF Mapping Messages                                   ; Off                ;                    ;
+; VHDL Version                                                     ; VHDL_2008          ; VHDL_1993          ;
+; Use smart compilation                                            ; Off                ; Off                ;
+; Enable parallel Assembler and Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                      ; Off                ; Off                ;
+; Restructure Multiplexers                                         ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                              ; Off                ; Off                ;
+; Preserve fewer node names                                        ; On                 ; On                 ;
+; Intel FPGA IP Evaluation Mode                                    ; Enable             ; Enable             ;
+; Verilog Version                                                  ; Verilog_2001       ; Verilog_2001       ;
+; State Machine Processing                                         ; Auto               ; Auto               ;
+; Safe State Machine                                               ; Off                ; Off                ;
+; Extract Verilog State Machines                                   ; On                 ; On                 ;
+; Extract VHDL State Machines                                      ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                       ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                   ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                          ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                        ; On                 ; On                 ;
+; Parallel Synthesis                                               ; On                 ; On                 ;
+; DSP Block Balancing                                              ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                               ; On                 ; On                 ;
+; Power-Up Don't Care                                              ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                     ; Off                ; Off                ;
+; Remove Duplicate Registers                                       ; On                 ; On                 ;
+; Ignore CARRY Buffers                                             ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                           ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                            ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                        ; Off                ; Off                ;
+; Ignore LCELL Buffers                                             ; Off                ; Off                ;
+; Ignore SOFT Buffers                                              ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                   ; Off                ; Off                ;
+; Optimization Technique                                           ; Balanced           ; Balanced           ;
+; Carry Chain Length                                               ; 70                 ; 70                 ;
+; Auto Carry Chains                                                ; On                 ; On                 ;
+; Auto Open-Drain Pins                                             ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                            ; Off                ; Off                ;
+; Auto ROM Replacement                                             ; On                 ; On                 ;
+; Auto RAM Replacement                                             ; On                 ; On                 ;
+; Auto DSP Block Replacement                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                  ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                  ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                    ; On                 ; On                 ;
+; Strict RAM Replacement                                           ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                           ; Off                ; Off                ;
+; Auto RAM Block Balancing                                         ; On                 ; On                 ;
+; Auto RAM to Logic Cell Conversion                                ; Off                ; Off                ;
+; Auto Resource Sharing                                            ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                               ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                               ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                    ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing              ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                ; Off                ; Off                ;
+; Timing-Driven Synthesis                                          ; On                 ; On                 ;
+; Report Parameter Settings                                        ; On                 ; On                 ;
+; Report Source Assignments                                        ; On                 ; On                 ;
+; Report Connectivity Checks                                       ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                               ; Off                ; Off                ;
+; Synchronization Register Chain Length                            ; 2                  ; 2                  ;
+; Power Optimization During Synthesis                              ; Normal compilation ; Normal compilation ;
+; HDL message level                                                ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                  ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report         ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report               ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report        ; 100                ; 100                ;
+; Clock MUX Protection                                             ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                      ; Off                ; Off                ;
+; Block Design Naming                                              ; Auto               ; Auto               ;
+; SDC constraint protection                                        ; Off                ; Off                ;
+; Synthesis Effort                                                 ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal     ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                             ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                               ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                      ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                           ; On                 ; On                 ;
++------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 8           ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
++----------------------------+-------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+    Info: Processing started: Thu Jul 09 17:42:28 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off damian_lab4 -c damian_lab4
+Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
+Error (10500): VHDL syntax error at square_gen.vhdl(69) near text ")"; mismatched closing parenthesis  File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/square_gen.vhdl Line: 69
+Error (10500): VHDL syntax error at square_gen.vhdl(69) near text "else";  expecting ";" File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/square_gen.vhdl Line: 69
+Info (12021): Found 0 design units, including 0 entities, in source file square_gen.vhdl
+Info (12021): Found 2 design units, including 1 entities, in source file ram.vhd
+    Info (12022): Found design unit 1: ram-SYN File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/ram.vhd Line: 55
+    Info (12023): Found entity 1: ram File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/ram.vhd Line: 43
+Info (12021): Found 2 design units, including 1 entities, in source file wm8731.vhd
+    Info (12022): Found design unit 1: wm8731-behavioral File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/wm8731.vhd Line: 20
+    Info (12023): Found entity 1: wm8731 File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/wm8731.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file top.vhd
+    Info (12022): Found design unit 1: top-arch File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/top.vhd Line: 26
+    Info (12023): Found entity 1: top File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/top.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file pll_18m.vhd
+    Info (12022): Found design unit 1: pll_18m-SYN File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/pll_18m.vhd Line: 54
+    Info (12023): Found entity 1: pll_18m File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/pll_18m.vhd Line: 43
+Info (12021): Found 2 design units, including 0 entities, in source file dds_pkg.vhd
+    Info (12022): Found design unit 1: dds_pkg File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds_pkg.vhd Line: 7
+    Info (12022): Found design unit 2: dds_pkg-body File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds_pkg.vhd Line: 18
+Info (12021): Found 2 design units, including 1 entities, in source file dds_lut.vhd
+    Info (12022): Found design unit 1: dds_lut-arch File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds_lut.vhd Line: 18
+    Info (12023): Found entity 1: dds_lut File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds_lut.vhd Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file dds_gen.vhd
+    Info (12022): Found design unit 1: dds_gen-arch File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds_gen.vhd Line: 17
+    Info (12023): Found entity 1: dds_gen File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds_gen.vhd Line: 6
+Info (12021): Found 2 design units, including 1 entities, in source file dds.vhd
+    Info (12022): Found design unit 1: dds-arch File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds.vhd Line: 18
+    Info (12023): Found entity 1: dds File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/dds.vhd Line: 6
+Info (12021): Found 2 design units, including 1 entities, in source file audio_delay.vhd
+    Info (12022): Found design unit 1: audio_delay-Behavioral File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/audio_delay.vhd Line: 17
+    Info (12023): Found entity 1: audio_delay File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/audio_delay.vhd Line: 5
+Info (12021): Found 2 design units, including 1 entities, in source file ram_2port.vhd
+    Info (12022): Found design unit 1: ram_2port-SYN File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/ram_2port.vhd Line: 56
+    Info (12023): Found entity 1: ram_2port File: C:/Users/Mustafa/source/repos/TI-BHT-5.S/Entwurf Digitaler Systeme/damian_lab4 v2/damian_lab4/ram_2port.vhd Line: 43
+Error: Quartus Prime Analysis & Synthesis was unsuccessful. 2 errors, 0 warnings
+    Error: Peak virtual memory: 4772 megabytes
+    Error: Processing ended: Thu Jul 09 17:42:36 2026
+    Error: Elapsed time: 00:00:08
+    Error: Total CPU time (on all processors): 00:00:20
+
+

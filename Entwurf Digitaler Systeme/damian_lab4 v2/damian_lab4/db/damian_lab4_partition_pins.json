@@ -1,0 +1,77 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "led_echo",
+					"strict" : false
+				},
+				{
+					"name" : "led_keys[0]",
+					"strict" : false
+				},
+				{
+					"name" : "led_keys[1]",
+					"strict" : false
+				},
+				{
+					"name" : "led_keys[2]",
+					"strict" : false
+				},
+				{
+					"name" : "led_keys[3]",
+					"strict" : false
+				},
+				{
+					"name" : "led_key_signal",
+					"strict" : false
+				},
+				{
+					"name" : "i2c_sdat",
+					"strict" : false
+				},
+				{
+					"name" : "i2c_sclk",
+					"strict" : false
+				},
+				{
+					"name" : "aud_dacdat",
+					"strict" : false
+				},
+				{
+					"name" : "aud_daclrck",
+					"strict" : false
+				},
+				{
+					"name" : "switch_echo",
+					"strict" : false
+				},
+				{
+					"name" : "keys[0]",
+					"strict" : false
+				},
+				{
+					"name" : "keys[1]",
+					"strict" : false
+				},
+				{
+					"name" : "keys[2]",
+					"strict" : false
+				},
+				{
+					"name" : "keys[3]",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "audio_sel",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

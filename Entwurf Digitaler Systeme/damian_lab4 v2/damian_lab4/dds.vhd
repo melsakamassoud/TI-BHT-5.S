@@ -1,0 +1,86 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+-- entscheidet anhand adressen welcher sinus-Abschnitt auszugeben ist
+ENTITY dds IS
+GENERIC(
+addr_width : integer RANGE 6 TO 12 := 10;
+-- ein Bit mehr für das Vorzeichen
+data_width : integer := 11
+);
+PORT (
+addrin : IN std_logic_vector(addr_width-1 DOWNTO 0);
+dataout : OUT std_logic_vector(data_width-1 DOWNTO 0)
+);
+END dds;
+
+ARCHITECTURE arch OF dds IS
+-- Signale und Konstanten definieren
+
+signal sel : std_logic_vector(1 downto 0) := "00";
+signal dataout_lut : std_logic_vector(data_width-2 downto 0);
+signal addrin_lut : std_logic_vector(addr_width-3 downto 0);
+
+constant addr_max : integer := 2**(addr_width-2) - 1;
+
+BEGIN
+
+ sel <= addrin(addr_width-1 downto addr_width-2);
+
+ process(addrin, sel)
+        variable addr : integer;
+    begin
+        addr := to_integer(
+                    unsigned(
+                        addrin(addr_width-3 downto 0)
+                    )
+                );
+        case sel is
+
+            -- Quadrant 1 und 3 -> hochzählen
+            when "00" | "10" => addrin_lut <= std_logic_vector(to_unsigned(addr, addrin_lut'length));
+            -- Quadrant 2 und 4 -> runterzählen
+            when "01" | "11" =>
+                addrin_lut <= std_logic_vector(
+                                to_unsigned(
+                                    addr_max - addr,
+                                    addrin_lut'length
+                                )
+                            );
+            when others =>
+                addrin_lut <= (others => '0');
+        end case;
+    end process;
+
+
+dds_lut : entity work.dds_lut(arch)
+generic map(
+addr_width => addr_width-2,
+data_width => data_width-1
+)
+port map(
+addrin => addrin_lut,
+dataout => dataout_lut
+);
+
+
+ process(addrin, dataout_lut, sel)
+        variable temp : signed(data_width-1 downto 0);
+
+    begin
+        -- Positiven LUT-Wert auf volle Breite erweitern
+        temp := signed('0' & dataout_lut);
+
+        case sel is
+            -- 0° .. 180°
+            when "00" | "01" =>
+                dataout <= std_logic_vector(temp);
+            -- 180° .. 360°
+            when "10" | "11" =>
+                dataout <= std_logic_vector(-temp);
+            when others =>
+                dataout <= (others => '0');
+        end case;
+    end process;
+END;
